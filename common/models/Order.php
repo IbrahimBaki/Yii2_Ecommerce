@@ -17,8 +17,8 @@ use Yii;
  * @property int|null $created_at
  * @property int|null $created_by
  *
- * @property OrderAddresses $orderAddresses
- * @property OrderItems[] $orderItems
+ * @property OrderAddress $orderAddresses
+ * @property OrderItem[] $orderItems
  * @property User $createdBy
  */
 class Order extends \yii\db\ActiveRecord

@@ -14,7 +14,7 @@ use Yii;
  * @property string $country
  * @property string|null $zipcode
  *
- * @property Orders $order
+ * @property Order $order
  */
 class OrderAddress extends \yii\db\ActiveRecord
 {

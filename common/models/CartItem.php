@@ -13,7 +13,7 @@ use Yii;
  * @property int|null $created_by
  *
  * @property User $createdBy
- * @property Products $product
+ * @property Product $product
  */
 class CartItem extends \yii\db\ActiveRecord
 {

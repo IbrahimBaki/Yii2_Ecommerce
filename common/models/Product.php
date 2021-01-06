@@ -18,8 +18,8 @@ use Yii;
  * @property int|null $created_by
  * @property int|null $updated_by
  *
- * @property CartItems[] $cartItems
- * @property OrderItems[] $orderItems
+ * @property CartItem[] $cartItems
+ * @property OrderItem[] $orderItems
  * @property User $createdBy
  * @property User $updatedBy
  */
@@ -59,9 +59,9 @@ class Product extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'description' => 'Description',
-            'image' => 'Image',
+            'image' => 'Product Image',
             'price' => 'Price',
-            'status' => 'Status',
+            'status' => 'Published',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
