@@ -67,10 +67,6 @@ class ProductController extends Controller
     {
         $model = new Product();
         $model->imageFile = UploadedFile::getInstance($model,'imageFile');
-//        echo "<pre>";
-//        var_dump($_FILES);
-//        echo "</pre>";
-//exit;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
