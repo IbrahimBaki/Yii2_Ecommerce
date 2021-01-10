@@ -1,21 +1,21 @@
 <?php
+
 namespace frontend\controllers;
 
 use common\models\Product;
+use frontend\base\Controller;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\data\ActiveDataProvider;
 use yii\web\BadRequestHttpException;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
-use frontend\models\ContactForm;
 
 /**
  * Site controller
@@ -78,12 +78,12 @@ class SiteController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Product::find()->published(),
-            'pagination'=>[
-                'pageSize'=>9
+            'pagination' => [
+                'pageSize' => 9
             ],
         ]);
-        return $this->render('index',[
-            'dataProvider'=>$dataProvider,
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -194,8 +194,8 @@ class SiteController extends Controller
      * Verify email address
      *
      * @param string $token
-     * @throws BadRequestHttpException
      * @return yii\web\Response
+     * @throws BadRequestHttpException
      */
     public function actionVerifyEmail($token)
     {
@@ -235,4 +235,5 @@ class SiteController extends Controller
             'model' => $model
         ]);
     }
+
 }
