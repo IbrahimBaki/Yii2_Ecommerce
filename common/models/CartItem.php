@@ -2,7 +2,10 @@
 
 namespace common\models;
 
-use Yii;
+
+
+use common\models\query\CartItemQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%cart_items}}".
@@ -15,7 +18,7 @@ use Yii;
  * @property User $createdBy
  * @property Product $product
  */
-class CartItem extends \yii\db\ActiveRecord
+class CartItem extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -34,7 +37,7 @@ class CartItem extends \yii\db\ActiveRecord
             [['product_id', 'quantity'], 'required'],
             [['product_id', 'quantity', 'created_by'], 'integer'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
-            [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::className(), 'targetAttribute' => ['product_id' => 'id']],
+            [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
         ];
     }
 
@@ -54,7 +57,7 @@ class CartItem extends \yii\db\ActiveRecord
     /**
      * Gets query for [[CreatedBy]].
      *
-     * @return \yii\db\ActiveQuery|\common\models\query\UserQuery
+     * @return \yii\db\ActiveQuery|\common\models\User
      */
     public function getCreatedBy()
     {
@@ -64,19 +67,19 @@ class CartItem extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Product]].
      *
-     * @return \yii\db\ActiveQuery|\common\models\query\ProductsQuery
+     * @return \yii\db\ActiveQuery|\common\models\query\ProductQuery
      */
     public function getProduct()
     {
-        return $this->hasOne(Products::className(), ['id' => 'product_id']);
+        return $this->hasOne(Product::className(), ['id' => 'product_id']);
     }
 
     /**
      * {@inheritdoc}
-     * @return \common\models\query\CartItemQuery the active query used by this AR class.
+     * @return CartItemQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \common\models\query\CartItemQuery(get_called_class());
+        return new CartItemQuery(get_called_class());
     }
 }
