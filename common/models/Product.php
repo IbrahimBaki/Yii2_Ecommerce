@@ -2,9 +2,11 @@
 
 namespace common\models;
 
+use common\models\query\ProductQuery;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\helpers\FileHelper;
 use yii\helpers\StringHelper;
 use yii\web\UploadedFile;
@@ -28,7 +30,7 @@ use yii\web\UploadedFile;
  * @property User $createdBy
  * @property User $updatedBy
  */
-class Product extends \yii\db\ActiveRecord
+class Product extends ActiveRecord
 {
     /**
      * @var UploadedFile
@@ -111,7 +113,7 @@ class Product extends \yii\db\ActiveRecord
     /**
      * Gets query for [[CreatedBy]].
      *
-     * @return \yii\db\ActiveQuery|\common\models\query\UserQuery
+     * @return \yii\db\ActiveQuery|\common\models\User
      */
     public function getCreatedBy()
     {
@@ -121,7 +123,7 @@ class Product extends \yii\db\ActiveRecord
     /**
      * Gets query for [[UpdatedBy]].
      *
-     * @return \yii\db\ActiveQuery|\common\models\query\UserQuery
+     * @return \yii\db\ActiveQuery|\common\models\User
      */
     public function getUpdatedBy()
     {
@@ -130,11 +132,11 @@ class Product extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
-     * @return \common\models\query\ProductQuery the active query used by this AR class.
+     * @return ProductQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \common\models\query\ProductQuery(get_called_class());
+        return new ProductQuery(get_called_class());
     }
 
     public function save($runValidation = true, $attributeNames = null)
@@ -158,9 +160,14 @@ class Product extends \yii\db\ActiveRecord
 
     public function getImageUrl()
     {
-        if($this->image){
+        return self::formatImageUrl($this->image);
+    }
 
-            return Yii::$app->params['frontendUrl'].'/storage'.$this->image;
+    public function formatImageUrl($imagePath)
+    {
+        if($imagePath){
+
+            return Yii::$app->params['frontendUrl'].'/storage'.$imagePath;
         }else{
             return Yii::$app->params['frontendUrl'].'/img/no_img.png';
 
@@ -171,4 +178,5 @@ class Product extends \yii\db\ActiveRecord
     {
            return StringHelper::truncateWords(strip_tags($this->description),30);
     }
+
 }
