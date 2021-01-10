@@ -20,6 +20,8 @@ use yii\db\ActiveRecord;
  */
 class CartItem extends ActiveRecord
 {
+const SESSION_KEY = 'CART_ITEMS';
+
     /**
      * {@inheritdoc}
      */
