@@ -70,9 +70,9 @@ class CartController extends Controller
         if(isGuest()){
             $cartItems = Yii::$app->session->get(CartItem::SESSION_KEY,[]);
             $found = false;
-            foreach ($cartItems as &$cartItem) {
-                if($cartItem['id'] == $id){
-                    $cartItem['quantity']++;
+            foreach ($cartItems as &$item) {
+                if($item['id'] == $id){
+                    $item['quantity']++;
                     $found=true;
                     break;
                 }
@@ -133,6 +133,34 @@ class CartController extends Controller
         }
         return $this->redirect(['index']);
         
+    }
+
+    public function actionChangeQuantity()
+    {
+        $id = Yii::$app->request->post('id');
+        $product = Product::find()->id($id)->published()->one();
+        if(!$product){
+            throw new NotFoundHttpException("Product does not exist");
+        }
+        $quantity = Yii::$app->request->post('quantity');
+        if(isGuest()){
+            $cartItems = Yii::$app->session->get(CartItem::SESSION_KEY,[]);
+            foreach ($cartItems as &$item) {
+                if($item['id'] == $id){
+                    $item['quantity'] = $quantity;
+                    break;
+                }
+            }
+            Yii::$app->session->set(CartItem::SESSION_KEY,$cartItems);
+        }else{
+            $cartItem = CartItem::find()->userId(currentUserId())->productId($id)->one();
+            if($cartItem){
+                $cartItem->quantity = $quantity;
+                $cartItem->save();
+
+            }
+        }
+        return CartItem::getTotalQuantityForUser(currentUserId());
     }
 
 }
