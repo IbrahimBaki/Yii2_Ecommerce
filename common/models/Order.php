@@ -2,7 +2,9 @@
 
 namespace common\models;
 
-use Yii;
+
+use common\models\query\OrderQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%orders}}".
@@ -21,8 +23,10 @@ use Yii;
  * @property OrderItem[] $orderItems
  * @property User $createdBy
  */
-class Order extends \yii\db\ActiveRecord
+class Order extends ActiveRecord
 {
+const STATUS_DRAFT =0;
+
     /**
      * {@inheritdoc}
      */
@@ -67,27 +71,27 @@ class Order extends \yii\db\ActiveRecord
     /**
      * Gets query for [[OrderAddresses]].
      *
-     * @return \yii\db\ActiveQuery|\common\models\query\OrderAddressesQuery
+     * @return \yii\db\ActiveQuery|\common\models\query\OrderAddressQuery
      */
     public function getOrderAddresses()
     {
-        return $this->hasOne(OrderAddresses::className(), ['order_id' => 'id']);
+        return $this->hasOne(OrderAddress::className(), ['order_id' => 'id']);
     }
 
     /**
      * Gets query for [[OrderItems]].
      *
-     * @return \yii\db\ActiveQuery|\common\models\query\OrderItemsQuery
+     * @return \yii\db\ActiveQuery|\common\models\query\OrderItemQuery
      */
     public function getOrderItems()
     {
-        return $this->hasMany(OrderItems::className(), ['order_id' => 'id']);
+        return $this->hasMany(OrderItem::className(), ['order_id' => 'id']);
     }
 
     /**
      * Gets query for [[CreatedBy]].
      *
-     * @return \yii\db\ActiveQuery|\common\models\query\UserQuery
+     * @return \yii\db\ActiveQuery|\common\models\User
      */
     public function getCreatedBy()
     {
@@ -96,10 +100,10 @@ class Order extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
-     * @return \common\models\query\OrderQuery the active query used by this AR class.
+     * @return OrderQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \common\models\query\OrderQuery(get_called_class());
+        return new OrderQuery(get_called_class());
     }
 }
