@@ -28,7 +28,7 @@ class CartController extends Controller
         return [
             [
                 'class' => ContentNegotiator::class,
-                'only' => ['add', 'create-order', 'submit-payment'],
+                'only' => ['add', 'create-order', 'submit-payment','change-quantity'],
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
 
@@ -154,7 +154,10 @@ class CartController extends Controller
 
             }
         }
-        return CartItem::getTotalQuantityForUser(currentUserId());
+        return [
+            'quantity' => CartItem::getTotalQuantityForUser(currentUserId()),
+            'price' => Yii::$app->formatter->asCurrency(CartItem::getTotalPriceForItemForUser($id,currentUserId())),
+        ];
     }
 
     public function actionCheckout()
