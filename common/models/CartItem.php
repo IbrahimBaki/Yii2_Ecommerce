@@ -3,7 +3,6 @@
 namespace common\models;
 
 
-
 use common\models\query\CartItemQuery;
 use Yii;
 use yii\db\ActiveRecord;
@@ -21,7 +20,7 @@ use yii\db\ActiveRecord;
  */
 class CartItem extends ActiveRecord
 {
-const SESSION_KEY = 'CART_ITEMS';
+    const SESSION_KEY = 'CART_ITEMS';
 
     /**
      * {@inheritdoc}
@@ -33,39 +32,43 @@ const SESSION_KEY = 'CART_ITEMS';
 
     public static function getTotalQuantityForUser($currentUserId)
     {
-        if(isGuest()){
-            $cartItems = Yii::$app->session->get(CartItem::SESSION_KEY,[]);
+        if (isGuest()) {
+            $cartItems = Yii::$app->session->get(CartItem::SESSION_KEY, []);
             $sum = 0;
             foreach ($cartItems as $cartItem) {
                 $sum += $cartItem['quantity'];
             }
-        }else{
-            $sum = CartItem::findBySql("SELECT SUM(quantity) FROM cart_items WHERE created_by = :userId",['userId'=>$currentUserId])->scalar();
+        } else {
+            $sum = CartItem::findBySql("SELECT SUM(quantity) FROM cart_items WHERE created_by = :userId", ['userId' => $currentUserId])->scalar();
         }
         return $sum;
     }
+
     public static function getTotalPriceForUser($currentUserId)
     {
-        if(isGuest()){
-            $cartItems = Yii::$app->session->get(CartItem::SESSION_KEY,[]);
+        if (isGuest()) {
+            $cartItems = Yii::$app->session->get(CartItem::SESSION_KEY, []);
             $sum = 0;
             foreach ($cartItems as $cartItem) {
                 $sum += $cartItem['quantity'] * $cartItem['price'];
             }
-        }else{
+        } else {
             $sum = CartItem::findBySql(
                 "SELECT SUM(c.quantity * p.price) 
                     FROM cart_items c
                     LEFT JOIN products p on c.product_id = p.id
-                    WHERE c.created_by = :userId",['userId'=>$currentUserId])->scalar();
+                    WHERE c.created_by = :userId", ['userId' => $currentUserId])->scalar();
         }
         return $sum;
     }
 
     public static function getItemsForUser($currentUserId)
     {
-        return CartItem::findBySql(
-            "SELECT 
+        if (isGuest()) {
+            $cartItems = Yii::$app->session->get(CartItem::SESSION_KEY, []);
+        } else {
+            $cartItems = CartItem::findBySql(
+                "SELECT 
                     c.product_id as id,
                     p.image,
                     p.name, 
@@ -75,9 +78,20 @@ const SESSION_KEY = 'CART_ITEMS';
                 FROM cart_items c 
                 LEFT JOIN products p on p.id = c.product_id 
                 WHERE c.created_by = :userId",
-                ['userId'=>$currentUserId])
-            ->asArray()
-            ->all();
+                ['userId' => $currentUserId])
+                ->asArray()
+                ->all();
+        }
+        return $cartItems;
+    }
+
+    public static function clearCartItems($currentUserId)
+    {
+        if(isGuest()){
+            Yii::$app->session->remove(CartItem::SESSION_KEY);
+        }else{
+            CartItem::deleteAll(['created_by'=>$currentUserId]);
+        }
     }
 
     /**

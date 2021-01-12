@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @var \common\models\Order $order
  * @var  \common\models\OrderAddress $orderAddress
@@ -11,12 +10,15 @@
 use yii\bootstrap4\ActiveForm;
 
 ?>
+
 <?php $form = ActiveForm::begin([
-    'action'=>[''],
+    'id'=>'checkout-form',
+    'action'=>['']
 ]); ?>
 
 <div class="row">
     <div class="col">
+
         <div class="card mb-3">
             <div class="card-header">
                 <h5>Account Information</h5>
@@ -54,6 +56,7 @@ use yii\bootstrap4\ActiveForm;
                 <?= $form->field($orderAddress, 'zipcode') ?>
             </div>
         </div>
+
     </div>
     <div class="col">
         <div class="card">
@@ -72,14 +75,12 @@ use yii\bootstrap4\ActiveForm;
                         </td>
                     </tr>
                 </table>
-
                 <p class="text-right mt-3">
-                    <button class="btn btn-secondary">Continue</button>
+                    <button class="btn btn-secondary">Checkout</button>
                 </p>
             </div>
         </div>
     </div>
 </div>
-
-
 <?php ActiveForm::end(); ?>
+
