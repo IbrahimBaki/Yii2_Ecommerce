@@ -12,8 +12,6 @@ use frontend\base\Controller;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersGetRequest;
-use PayPalCheckoutSdk\Payments\AuthorizationsGetRequest;
-use Sample\PayPalClient;
 use Yii;
 use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
@@ -259,7 +257,7 @@ class CartController extends Controller
                     $paidAmount += $purchase_unit->amount->value;
                 }
             }
-            if ($paidAmount === $order->total_price && $response->result->status === 'COMPLETED') {
+            if ($paidAmount == $order->total_price && $response->result->status === 'COMPLETED') {
                 $order->status = Order::STATUS_COMPLETED;
             }
             $order->transaction_id = $response->result->purchase_units[0]->payments->captures[0]->id;
