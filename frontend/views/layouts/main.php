@@ -7,7 +7,6 @@
 use yii\helpers\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
-use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
 
@@ -84,9 +83,16 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
+        <div class="row">
+            <div class="col">
+                <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
+            </div>
+            <div class="col text-right">
+                <p class="pull-right">Created by <a href="https://www.linkedin.com/in/ibrahimbaki/" target="_blank">Ibrahim Baki</a></p>
+            </div>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
+
+        </div>
     </div>
 </footer>
 
