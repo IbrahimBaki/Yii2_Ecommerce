@@ -1,7 +1,8 @@
 <?php
 
+use yii\bootstrap4\Html;
 use yii\bootstrap4\LinkPager;
-use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
@@ -42,7 +43,14 @@ $this->params['breadcrumbs'][] = $this->title;
             //'email:email',
             //'transaction_id',
             //'paypal_order_id',
-            'status:orderStatus',
+            [
+                    'attribute'=>'status',
+                'filter'=>Html::activeDropDownList($searchModel,'status',\common\models\Order::getStatusLabels(),[
+                        'class'=>'form-control',
+                    'prompt'=>'All'
+                ]),
+                'format'=>['orderStatus'],
+            ],
             'created_at:datetime',
             //'created_by',
 

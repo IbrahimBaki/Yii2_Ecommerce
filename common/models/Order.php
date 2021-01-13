@@ -29,8 +29,9 @@ use yii\db\Exception;
 class Order extends ActiveRecord
 {
 const STATUS_DRAFT =0;
-const STATUS_COMPLETED =1;
+const STATUS_PAID =1;
 const STATUS_FAILED =2;
+const STATUS_COMPLETED =10;
 
     /**
      * {@inheritdoc}
@@ -173,4 +174,15 @@ const STATUS_FAILED =2;
             ->setSubject('Your Order is confirmed at ' . Yii::$app->name)
             ->send();
     }
+
+    public static function getStatusLabels()
+    {
+        return [
+            self::STATUS_COMPLETED =>'Completed',
+            self::STATUS_PAID=>"Paid",
+            self::STATUS_DRAFT=>'UnPaid',
+            self::STATUS_FAILED=>'Failed',
+        ];
+    }
+
 }

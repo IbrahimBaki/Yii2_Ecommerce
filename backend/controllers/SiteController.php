@@ -72,7 +72,7 @@ class SiteController extends Controller
         $totalProducts = OrderItem::find()
             ->alias('oi')
             ->innerJoin(Order::tableName() . ' o', 'o.id = oi.order_id')
-            ->andWhere(['o.status' => Order::STATUS_COMPLETED])
+            ->andWhere(['o.status' => [Order::STATUS_PAID,Order::STATUS_COMPLETED]])
             ->sum('quantity');
 
         $orders = Order::findBySql(
@@ -80,9 +80,9 @@ class SiteController extends Controller
                         CAST(DATE_FORMAT(FROM_UNIXTIME(o.created_at),'%Y-%m-%d %H:%i:%s') as DATE ) as 'date',
                         SUM(o.total_price) as 'total_price'
                         FROM orders o
-                        WHERE o.status = :status
+                        WHERE o.status IN (".Order::STATUS_PAID.",".Order::STATUS_COMPLETED.")
                         GROUP BY CAST(DATE_FORMAT(FROM_UNIXTIME(o.created_at),'%Y-%m-%d %H:%i:%s') as DATE )
-                        ", ['status' => Order::STATUS_COMPLETED])
+                        ")
             ->asArray()
             ->all();
         //line Chart
@@ -107,8 +107,8 @@ class SiteController extends Controller
             " SELECT  country,SUM(total_price) as total_price
                     FROM orders o
                     INNER JOIN order_addresses oa on o.id = oa.order_id
-                    WHERE o.status = :status
-                    GROUP BY country",['status'=>Order::STATUS_COMPLETED])
+                    WHERE o.status IN (".Order::STATUS_PAID.",".Order::STATUS_COMPLETED.")
+                    GROUP BY country")
             ->asArray()
             ->all();
         $countryLabels = ArrayHelper::getColumn($countriesData, 'country');
