@@ -134,8 +134,13 @@ AppAsset::register($this);
         <!-- Footer -->
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2020</span>
+                <div class="row copyright">
+                    <div class="col">
+                         &copy; <?= Html::encode(Yii::$app->name) ?> <?php echo date('Y') ?>
+                    </div>
+                    <div class="col text-right">
+                        Created by <a href="https://www.linkedin.com/in/ibrahimbaki/" target="_blank">Ibrahim Baki</a>
+                    </div>
                 </div>
             </div>
         </footer>
