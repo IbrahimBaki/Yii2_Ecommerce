@@ -4,6 +4,7 @@
 namespace frontend\controllers;
 
 
+use common\models\User;
 use frontend\base\Controller;
 use Yii;
 use yii\filters\AccessControl;
@@ -63,6 +64,7 @@ class ProfileController extends Controller
             throw new ForbiddenHttpException("You Are Only allowed to make ajax request");
         }
         $user = Yii::$app->user->identity;
+        $user->scenario = User::SCENARIO_UPDATE;
         $success = false;
         if($user->load(Yii::$app->request->post()) && $user->save()){
             $success = true;
