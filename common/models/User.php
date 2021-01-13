@@ -11,6 +11,8 @@ use yii\web\IdentityInterface;
  * User model
  *
  * @property integer $id
+ * @property string $firstname
+ * @property string $lastname
  * @property string $username
  * @property string $password_hash
  * @property string $password_reset_token
@@ -18,9 +20,11 @@ use yii\web\IdentityInterface;
  * @property string $email
  * @property string $auth_key
  * @property integer $status
+ * @property boolean $admin
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ * @property UserAddress[] $addresses
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -28,6 +32,9 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
 
+    public $password;
+    public $password_repeat;
+    public const SCENARIO_UPDATE = 'update';
 
     /**
      * {@inheritdoc}
@@ -46,15 +53,26 @@ class User extends ActiveRecord implements IdentityInterface
             TimestampBehavior::className(),
         ];
     }
+    public function scenarios()
+    {
+        return array_merge(parent::scenarios(),[
+            self::SCENARIO_UPDATE =>['firstname','lastname','email','username','password','password_repeat']
+        ]);
+    }
 
-    /**
+    /**user1
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
+            [['firstname','lastname','username','email'],'required'],
+            [['firstname','lastname','username','email'],'string','max'=>'255'],
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            ['admin','default','value'=>0],
+            ['password','string','min'=>8],
+            ['password_repeat','compare','compareAttribute'=>'password'],
         ];
     }
 
@@ -212,7 +230,34 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getDisplayName()
     {
-        return $this->username;
+        $fullName = trim($this->firstname . ' ' . $this->lastname);
+        return $fullName ?:$this->email;
 
+    }
+
+    public function getAddresses()
+    {
+        return $this->hasMany(UserAddress::class,['user_id'=>'id']);
+
+    }
+    /**
+     * @return  \common\models\UserAddress|null
+     */
+    public function getAddress(): ?UserAddress
+    {
+        // if address is found it will return it
+        //if not it will make new instance
+        $address = $this->addresses[0] ?? new UserAddress() ;
+        $address->user_id = $this->id;
+        return $address;
+
+    }
+
+    public function afterValidate()
+    {
+        parent::afterValidate();
+        if($this->password){
+            $this->password_hash = Yii::$app->security->generatePasswordHash($this->password);
+        }
     }
 }
