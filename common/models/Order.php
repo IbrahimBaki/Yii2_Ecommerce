@@ -50,6 +50,7 @@ const STATUS_FAILED =2;
             [['total_price'], 'number'],
             [['status', 'created_at', 'created_by'], 'integer'],
             [['firstname', 'lastname', 'transaction_id'], 'string', 'max' => 45],
+            [['email'], 'email'],
             [['email','paypal_order_id'], 'string', 'max' => 255],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
         ];
