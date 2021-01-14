@@ -2,6 +2,10 @@ table td ,
 table th {
     white-space: nowrap;
 }
+#productView td ,
+#productView th {
+    white-space: normal;
+}
 
 table th a.desc:after,
 table th a.asc:after{
