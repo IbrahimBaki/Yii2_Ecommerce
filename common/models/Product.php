@@ -176,7 +176,7 @@ class Product extends ActiveRecord
 
     public function getShortDescription()
     {
-           return StringHelper::truncateWords(strip_tags($this->description),30);
+           return StringHelper::truncateWords(strip_tags($this->description),20);
     }
 
     public function afterDelete()

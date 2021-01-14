@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="product-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h3><?= Html::encode($this->title) ?></h3>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= DetailView::widget([
         'model' => $model,
+        'id'=>'productView',
         'attributes' => [
             'id',
             [
@@ -35,7 +36,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'html',
                 'value' => fn() => Html::img($model->getImageUrl(), ['style' => 'width:50px']),
             ],
-            'name',
+            [
+                'attribute' => 'name',
+                'options' => [
+                    'style' => 'white-space:normal',
+
+                ],
+            ],
             'price:currency',
             [
                 'attribute' => 'status',

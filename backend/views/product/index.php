@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\StringHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\search\ProductSearch */
@@ -19,14 +20,14 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
+<div class="table-responsive">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
 
             ['attribute'=>'id',
-             'contentOptions'=>['style'=>'width:60px']],
+                'contentOptions'=>['style'=>'width:60px']],
             [
                 'label'=>'image',
                 'attribute' => 'image',
@@ -37,7 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
 
             ],
-            'name',
+            [
+                    'attribute'=>'name',
+                'content'=>function($model){
+        return StringHelper::truncateWords($model->name,7);
+                }
+            ],
             'price:currency',
             [
                 'attribute' => 'status',
@@ -45,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'content' => function ($model) {
                     /** @var  \common\models\Product $model */
                     return Html::tag('span',$model->status ? 'Active' : 'Draft',[
-                       'class'=>$model->status ? 'badge badge-success' : 'badge badge-danger'
+                        'class'=>$model->status ? 'badge badge-success' : 'badge badge-danger'
                     ]);
                 }
             ],
@@ -65,6 +71,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'common\grid\ActionColumn'],
         ],
     ]); ?>
+
+</div>
 
 
 </div>

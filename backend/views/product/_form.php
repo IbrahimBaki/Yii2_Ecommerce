@@ -37,6 +37,7 @@ use yii\bootstrap4\ActiveForm;
     <?= $form->field($model, 'price')->textInput([
         'maxlength' => true,
         'type'=>'number',
+        'step'=>'0.01',
     ]) ?>
 
     <?= $form->field($model, 'status')->checkbox() ?>
