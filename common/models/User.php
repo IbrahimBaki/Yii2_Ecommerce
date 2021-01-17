@@ -34,7 +34,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public $password;
     public $password_repeat;
-    public const SCENARIO_UPDATE = 'update';
+    const SCENARIO_UPDATE = 'update';
 
     /**
      * {@inheritdoc}
