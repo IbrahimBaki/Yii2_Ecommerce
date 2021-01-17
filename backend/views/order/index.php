@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'common\grid\ActionColumn',
-                'template' => '{view} {update} {delete}',
+                'template' => '{view} {update}',
             ],
         ],
     ]); ?>
